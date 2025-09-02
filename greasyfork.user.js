@@ -14,7 +14,7 @@
 // @grant        GM_setValue
 // @grant        GM_notification
 // @grant        GM_info
-// @icon         https://www.google.com/s2/favicons?sz=32&domain_url=google.com
+// @icon         https://www.google.com/s2/favicons?sz=32&domain_url=chrome.com
 // @grant        none
 // @license      Apache-2.0 license
 // ==/UserScript==
