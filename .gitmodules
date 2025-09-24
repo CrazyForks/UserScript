@@ -1,0 +1,3 @@
+[submodule "LinuxDo Scripts"]
+	path = LinuxDo Scripts
+	url = https://github.com/anghunk/linuxdo-scripts
