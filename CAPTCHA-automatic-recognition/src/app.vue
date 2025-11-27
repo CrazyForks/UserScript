@@ -15,8 +15,17 @@
     </div>
 
     <!-- 设置弹窗 -->
-    <div v-if="showSettings" class="captcha-settings-overlay" @click="closeSettings"></div>
-    <div v-if="showSettings" class="captcha-settings-modal" :class="{ show: showSettings }" @click.stop>
+    <div
+      v-if="showSettings"
+      class="captcha-settings-overlay"
+      @click="closeSettings"
+    ></div>
+    <div
+      v-if="showSettings"
+      class="captcha-settings-modal"
+      :class="{ show: showSettings }"
+      @click.stop
+    >
       <div class="captcha-settings-content">
         <h3>
           验证码识别设置 <span>{{ packageJson.version }}</span>
@@ -177,7 +186,7 @@
                   <input
                     type="text"
                     v-model="settings.geminiModel"
-                    placeholder="gemini-2.5-flash-lite-preview-06-17"
+                    placeholder="gemini-2.5-flash-lite"
                   />
                   <small>留空使用默认模型</small>
                 </div>
@@ -446,7 +455,8 @@ example.*.com
                       placeholder="https://raw.githubusercontent.com/anghunk/UserScript/main/CAPTCHA-automatic-recognition/rules.json"
                     />
                     <small
-                      >规则文件 URL，留空则使用默认 URL：https://raw.githubusercontent.com/anghunk/UserScript/main/CAPTCHA-automatic-recognition/rules.json</small
+                      >规则文件 URL，留空则使用默认
+                      URL：https://raw.githubusercontent.com/anghunk/UserScript/main/CAPTCHA-automatic-recognition/rules.json</small
                     >
                   </div>
                   <button
@@ -811,11 +821,11 @@ export default {
     imageToBase64(element) {
       try {
         // 检查元素类型
-        if (element.tagName === 'CANVAS') {
+        if (element.tagName === "CANVAS") {
           // 直接从 canvas 获取 base64 数据
           try {
             const base64Data = element.toDataURL("image/png").split(",")[1];
-            
+
             // 检查 base64 数据是否有效
             if (!base64Data || base64Data.length < 100) {
               console.error("生成的canvas base64数据无效或过短");
@@ -824,7 +834,7 @@ export default {
                 message: "Canvas数据转换失败或内容为空。请刷新验证码后重试。",
               };
             }
-            
+
             // console.log("Canvas成功转换为base64");
             return {
               success: true,
@@ -838,7 +848,7 @@ export default {
             };
           }
         }
-        
+
         // 以下是处理img元素的逻辑
         // 检查图片来源
         const imgSrc = element.src;
@@ -1009,7 +1019,7 @@ export default {
      */
     async recognizeWithGemini(base64Image) {
       // 使用自定义模型或默认模型
-      const model = this.settings.geminiModel || "gemini-2.5-flash-lite-preview-06-17";
+      const model = this.settings.geminiModel || "gemini-2.5-flash-lite";
       // 使用自定义API地址或默认地址
       const baseApiUrl =
         this.settings.geminiApiUrl ||
@@ -1256,43 +1266,46 @@ export default {
               // 查找所有匹配的验证码图片
               const captchaImgs = document.querySelectorAll(selector);
 
-                        // 为每个验证码图片或 canvas 查找对应的输入框
-          captchaImgs.forEach((captchaElement) => {
-            // 检查元素类型，支持 img 和 canvas 两种类型
-            if (captchaElement.tagName !== "IMG" && captchaElement.tagName !== "CANVAS") {
-              return;
-            }
+              // 为每个验证码图片或 canvas 查找对应的输入框
+              captchaImgs.forEach((captchaElement) => {
+                // 检查元素类型，支持 img 和 canvas 两种类型
+                if (
+                  captchaElement.tagName !== "IMG" &&
+                  captchaElement.tagName !== "CANVAS"
+                ) {
+                  return;
+                }
 
-            // 对于 img 元素，确保有 src 属性
-            if (captchaElement.tagName === "IMG" && !captchaElement.src) {
-              return;
-            }
+                // 对于 img 元素，确保有 src 属性
+                if (captchaElement.tagName === "IMG" && !captchaElement.src) {
+                  return;
+                }
 
-            // 避免重复添加已处理的元素
-            if (
-              captchaElement.nextElementSibling &&
-              captchaElement.nextElementSibling.classList.contains(
-                "captcha-recognition-icon"
-              )
-            ) {
-              return;
-            }
+                // 避免重复添加已处理的元素
+                if (
+                  captchaElement.nextElementSibling &&
+                  captchaElement.nextElementSibling.classList.contains(
+                    "captcha-recognition-icon"
+                  )
+                ) {
+                  return;
+                }
 
-            // 寻找最近的输入框
-            let inputField = this.findInputFieldForCaptcha(
-              captchaElement,
-              inputSelectors
-            );
+                // 寻找最近的输入框
+                let inputField = this.findInputFieldForCaptcha(
+                  captchaElement,
+                  inputSelectors
+                );
 
-            // 为验证码元素添加识别按钮
-            this.addRecognitionIcon(captchaElement, inputField);
+                // 为验证码元素添加识别按钮
+                this.addRecognitionIcon(captchaElement, inputField);
 
-            // 收集验证码元素信息
-            elements.push({
-              captchaImg: captchaElement,
-              inputField,
-            });
-          });
+                // 收集验证码元素信息
+                elements.push({
+                  captchaImg: captchaElement,
+                  inputField,
+                });
+              });
             } catch (error) {
               console.error(`选择器 '${selector}' 执行出错:`, error);
             }
@@ -1428,7 +1441,7 @@ export default {
           // console.log("使用预先检查的 base64 结果");
         } else {
           // 根据元素类型进行不同的处理
-          if (captchaImg.tagName === 'CANVAS') {
+          if (captchaImg.tagName === "CANVAS") {
             // 使用专门的 canvas 优化函数
             base64Result = this.optimizeCanvasImage(captchaImg);
             // 如果优化失败，回退到普通的转换
@@ -1721,7 +1734,7 @@ export default {
       // console.log("初始化验证码识别插件");
       this.registerMenuCommands();
       this.loadSettings();
-      
+
       // 检查是否需要自动获取云端配置（每天首次使用）
       this.checkAndFetchCloudConfig();
 
@@ -2016,8 +2029,7 @@ export default {
           }
         } else if (apiType === "gemini") {
           // 测试 Google Gemini API
-          const model =
-            this.settings.geminiModel || "gemini-2.5-flash-lite-preview-06-17";
+          const model = this.settings.geminiModel || "gemini-2.5-flash-lite";
           const baseApiUrl =
             this.settings.geminiApiUrl ||
             "https://generativelanguage.googleapis.com/v1beta/models";
@@ -2384,7 +2396,10 @@ export default {
             }
 
             // 寻找最近的输入框
-            let inputField = this.findInputFieldForCaptcha(captchaElement, inputSelectors);
+            let inputField = this.findInputFieldForCaptcha(
+              captchaElement,
+              inputSelectors
+            );
             if (inputField) {
               // console.log(`为验证码元素找到输入框:`, inputField);
             } else {
@@ -2415,12 +2430,12 @@ export default {
     findInputFieldForCaptcha(captchaImg, customSelectors) {
       // 定义基础过滤条件，排除 hidden 类型的输入框
       const baseFilter = ':not([type="hidden"])';
-      
+
       // 确定使用的选择器列表
       let inputSelectors = customSelectors || [...this.config.inputSelectors];
-      
+
       // 处理每个选择器，确保都应用了基础过滤条件
-      inputSelectors = inputSelectors.map(selector => {
+      inputSelectors = inputSelectors.map((selector) => {
         // 如果选择器已经包含:not([type="hidden"])，则不重复添加
         if (selector.includes(':not([type="hidden"])')) {
           return selector;
@@ -2431,15 +2446,17 @@ export default {
       // 如果没有提供自定义选择器，则添加用户自定义的输入框选择器
       if (!customSelectors && Array.isArray(this.settings.customInputSelectors)) {
         // 同样对自定义选择器应用过滤
-        const filteredCustomSelectors = this.settings.customInputSelectors.map(selector => {
-          if (!selector) return '';
-          if (selector.includes(':not([type="hidden"])')) {
-            return selector;
+        const filteredCustomSelectors = this.settings.customInputSelectors.map(
+          (selector) => {
+            if (!selector) return "";
+            if (selector.includes(':not([type="hidden"])')) {
+              return selector;
+            }
+            return `${selector}${baseFilter}`;
           }
-          return `${selector}${baseFilter}`;
-        });
-        
-        inputSelectors = inputSelectors.concat(filteredCustomSelectors.filter(s => s));
+        );
+
+        inputSelectors = inputSelectors.concat(filteredCustomSelectors.filter((s) => s));
       }
 
       // 添加规则中的选择器
@@ -2597,10 +2614,10 @@ export default {
         if (!this.settings.autoFetchCloudRules) {
           return;
         }
-        
+
         // 获取当前日期（格式：YYYY-MM-DD）
-        const today = new Date().toISOString().split('T')[0];
-        
+        const today = new Date().toISOString().split("T")[0];
+
         // 从存储中获取上次更新配置的日期
         let lastConfigUpdate;
         if (typeof GM_getValue !== "undefined") {
@@ -2608,22 +2625,22 @@ export default {
         } else {
           lastConfigUpdate = localStorage.getItem("lastConfigUpdate");
         }
-        
+
         // 如果没有记录或者不是今天，则更新配置
         if (!lastConfigUpdate || lastConfigUpdate !== today) {
           // 显示提示
           this.showToast("正在获取最新云端配置...", "info");
-          
+
           // 加载最新规则
           await this.loadRules();
-          
+
           // 记录更新日期
           if (typeof GM_setValue !== "undefined") {
             GM_setValue("lastConfigUpdate", today);
           } else {
             localStorage.setItem("lastConfigUpdate", today);
           }
-          
+
           this.showToast("云端配置更新完成", "success");
         }
       } catch (error) {
@@ -2631,7 +2648,7 @@ export default {
         // 失败时不显示提示，避免影响用户体验
       }
     },
-    
+
     /**
      * 优化 Canvas 验证码图像
      * @param {HTMLCanvasElement} canvasElement - canvas 元素
@@ -2640,7 +2657,7 @@ export default {
     optimizeCanvasImage(canvasElement) {
       try {
         // 获取 canvas 上下文
-        const ctx = canvasElement.getContext('2d');
+        const ctx = canvasElement.getContext("2d");
         if (!ctx) {
           return {
             success: false,
@@ -2649,14 +2666,19 @@ export default {
         }
 
         // 获取图像数据
-        const imageData = ctx.getImageData(0, 0, canvasElement.width, canvasElement.height);
+        const imageData = ctx.getImageData(
+          0,
+          0,
+          canvasElement.width,
+          canvasElement.height
+        );
         const data = imageData.data;
 
         // 创建一个新的 canvas 用于保存优化后的图像
-        const optimizedCanvas = document.createElement('canvas');
+        const optimizedCanvas = document.createElement("canvas");
         optimizedCanvas.width = canvasElement.width;
         optimizedCanvas.height = canvasElement.height;
-        const optimizedCtx = optimizedCanvas.getContext('2d');
+        const optimizedCtx = optimizedCanvas.getContext("2d");
 
         // 复制原始图像数据
         optimizedCtx.putImageData(imageData, 0, 0);
