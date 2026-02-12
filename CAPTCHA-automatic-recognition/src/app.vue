@@ -957,6 +957,13 @@ export default {
         return "https://api.openai.com/v1/chat/completions";
       }
 
+      if (url.endsWith("#")) {
+        return url.slice(0, -1);
+      }
+      if (url.endsWith("/chat/completions")) {
+        return url;
+      }
+
       if (!url.endsWith("/v1/chat/completions")) {
         // 移除末尾的斜杠（如果有）
         url = url.replace(/\/+$/, "");
